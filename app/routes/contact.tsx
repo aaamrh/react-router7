@@ -6,6 +6,11 @@ import type { ContactRecord } from "../data";
 // 服务端获取
 export async function loader({ params }: Route.LoaderArgs) {
   const contact = await getContact(params.contactId);
+
+  if (!contact) {
+    throw new Response("Not Found", { status: 404 });
+  }
+
   return { contact };
 }
 
@@ -85,17 +90,11 @@ function Favorite({
   return (
     <Form method="post">
       <button
-        aria-label={
-          favorite
-            ? "Remove from favorites"
-            : "Add to favorites"
-        }
+        aria-label={favorite ? "Remove from favorites" : "Add to favorites"}
         name="favorite"
-        value={favorite ? "false" : "true"}
-      >
+        value={favorite ? "false" : "true"}>
         {favorite ? "★" : "☆"}
       </button>
     </Form>
   );
 }
-
